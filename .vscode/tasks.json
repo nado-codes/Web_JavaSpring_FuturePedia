@@ -1,0 +1,70 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "debug",
+      "type": "shell",
+      "command": "mvn spring-boot:run -Drun.jvmArguments=\"-Xdebug\"",
+      "group": "build",
+      "options": {
+        "cwd": "${workspaceFolder}/Server/futurepedia"
+      }
+    },
+    {
+      "label": "build",
+      "type": "shell",
+      "command": "mvn clean install",
+      "group": "build",
+      "options": {
+        "cwd": "${workspaceFolder}/Server/futurepedia"
+      }
+    },
+    {
+      "label": "debug test",
+      "type": "shell",
+      "command": "mvnDebug test -DforkMode=never",
+      "group": "test",
+      "options": {
+        "cwd": "${workspaceFolder}/Server/futurepedia"
+      }
+    },
+    {
+      "label": "test",
+      "type": "shell",
+      "command": "mvn test",
+      "group": "test",
+      "options": {
+        "cwd": "${workspaceFolder}/Server/futurepedia"
+      }
+    }
+  ]
+}
+
+/*
+"tasks": [
+    {
+      "type": "shell",
+      "label": "run tests",
+      "group": "test",
+      "command": "dotnet test ${workspaceFolder}\\Tapknack_Tests",
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "type": "shell",
+      "label": "start backend",
+      "command": "dotnet run --project ${workspaceFolder}\\Tapknack_Server"
+    },
+    {
+      "type": "shell",
+      "label": "start frontend",
+      "command": "npm start",
+      "options": {
+        "cwd": "${workspaceFolder}/Tapknack_Frontend"
+      }
+    },
+    {
+      "label": "start",
+      "dependsOn": ["start backend", "start frontend"]
+    }
+  ]
+*/
