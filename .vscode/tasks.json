@@ -2,6 +2,14 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "type": "shell",
+      "label": "start frontend",
+      "command": "npm start",
+      "options": {
+        "cwd": "${workspaceFolder}/Frontend"
+      }
+    },
+    {
       "label": "debug",
       "type": "shell",
       "command": "mvn spring-boot:run -Drun.jvmArguments=\"-Xdebug\"",
