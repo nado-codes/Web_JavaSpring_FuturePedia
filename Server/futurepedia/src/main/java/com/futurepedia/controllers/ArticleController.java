@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.CallableStatement;
-import java.sql.DriverManager;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,10 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.futurepedia.models.Article;
 import com.futurepedia.utils.MySQLJDBCUtil;
 
+import nl.jiankai.mapper.ResultSetMapper;
+import nl.jiankai.mapper.ResultSetMapperFactory;
+
 @RestController
 public class ArticleController {
     @GetMapping("/articles")
-    public Article[] GetArticles() {
+    public List<Article> GetArticles() {
         String query = "{ call GetArticles() }";
         ResultSet rs;
 
@@ -28,19 +31,27 @@ public class ArticleController {
                 CallableStatement stmt = conn.prepareCall(query)) {
 
             rs = stmt.executeQuery();
-            while (rs.next()) {
-                System.out.println(String.format("%s - %s - %s - %s",
-                        rs.getString("Id") + " " +
-                                rs.getString("Name"),
-                        rs.getString("Content"),
-                        rs.getString("DateAdded"),
-                        rs.getString("LastModified")));
-            }
+
+            ResultSetMapper r = ResultSetMapperFactory.getResultSetMapperIdentity();
+            List<Article> articles = r.map(rs, Article.class);
+
+            /*
+             * while (rs.next()) {
+             * System.out.println(String.format("%s - %s - %s - %s",
+             * rs.getString("Id") + " " +
+             * rs.getString("Name"),
+             * rs.getString("Content"),
+             * rs.getString("DateAdded"),
+             * rs.getString("LastModified")));
+             * }
+             */
+
+            return articles;
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
 
-        return new Article[0];
+        return Collections.emptyList();
     }
 
     @GetMapping("/articles/id")

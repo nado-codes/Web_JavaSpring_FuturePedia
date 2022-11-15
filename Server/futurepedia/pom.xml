@@ -41,6 +41,13 @@
 		    <artifactId>mysql-connector-j</artifactId>
 		    <version>8.0.31</version>
 		</dependency>
+
+		<!-- https://github.com/jzheng2017/resultset-mapper -->
+		<dependency>
+  			<groupId>nl.jiankai</groupId>
+  			<artifactId>resultset-mapper</artifactId>
+  			<version>1.6.2</version>
+		</dependency>
 	</dependencies>
 
 	<build>

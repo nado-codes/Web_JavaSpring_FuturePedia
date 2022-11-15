@@ -1,14 +1,22 @@
 package com.futurepedia.models;
 
-import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class Article extends ModelBase {
-    public final String content;
+    public String Name;
+    public String Content;
 
-    public Article(long id, String content, Date dateAdded, Timestamp lastModified) {
+    public Article() {
+        super(0, null, null);
+        this.Name = null;
+        this.Content = null;
+    }
+
+    public Article(long id, String name, String content, LocalDateTime dateAdded, Timestamp lastModified) {
         // .. need to pass id, dateadded, lastmodified or use JSON Deserialization
         super(id, dateAdded, lastModified);
-        this.content = content;
+        this.Name = name;
+        this.Content = content;
     }
 }
