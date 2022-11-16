@@ -1,4 +1,4 @@
-package com.futurepedia.models;
+package com.coffeemapper;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;

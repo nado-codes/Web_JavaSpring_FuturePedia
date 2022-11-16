@@ -3,6 +3,8 @@ package com.futurepedia.models;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+import com.coffeemapper.ModelBase;
+
 public class Article extends ModelBase {
     public String Name;
     public String Content;

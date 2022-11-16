@@ -22,6 +22,7 @@ import nl.jiankai.mapper.ResultSetMapperFactory;
 
 @RestController
 public class ArticleController {
+
     @GetMapping("/articles")
     public List<Article> GetArticles() {
         String query = "{ call GetArticles() }";
@@ -34,17 +35,6 @@ public class ArticleController {
 
             ResultSetMapper r = ResultSetMapperFactory.getResultSetMapperIdentity();
             List<Article> articles = r.map(rs, Article.class);
-
-            /*
-             * while (rs.next()) {
-             * System.out.println(String.format("%s - %s - %s - %s",
-             * rs.getString("Id") + " " +
-             * rs.getString("Name"),
-             * rs.getString("Content"),
-             * rs.getString("DateAdded"),
-             * rs.getString("LastModified")));
-             * }
-             */
 
             return articles;
         } catch (SQLException ex) {
