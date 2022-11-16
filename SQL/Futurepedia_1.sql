@@ -17,13 +17,13 @@ BEGIN
 	SELECT Id, Name, Content, DateAdded, LastModified FROM Articles;
 END //
 DELIMITER //
-CREATE PROCEDURE GetArticleById(IN id int)
+CREATE PROCEDURE GetArticleById(IN in_id int)
 BEGIN
-	SELECT Id, Name, Content, DateAdded, LastModified FROM Articles WHERE Id=id;
+	SELECT Id, Name, Content, DateAdded, LastModified FROM Articles WHERE Id=in_id;
 END //
-CREATE PROCEDURE GetArticleByName(IN name varchar(64))
+CREATE PROCEDURE GetArticleByName(IN in_name varchar(64))
 BEGIN
-	SELECT Id, Name, Content, DateAdded, LastModified FROM Articles WHERE Name=name;
+	SELECT Id, Name, Content, DateAdded, LastModified FROM Articles WHERE Name=in_name;
 END //
 CREATE PROCEDURE AddArticle(
 	IN name varchar(64),
@@ -33,6 +33,7 @@ BEGIN
 	INSERT INTO Articles (Name, Content)
     VALUES(name,content);
 END //
+INSERT INTO Articles (Name,Content) values ("HelloArticle","HelloWorld");
 	
 /* ROLLBACK
 DROP DATABASE Futurepedia
