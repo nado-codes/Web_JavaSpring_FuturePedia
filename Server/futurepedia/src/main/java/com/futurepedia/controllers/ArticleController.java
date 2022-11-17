@@ -23,6 +23,8 @@ import nl.jiankai.mapper.ResultSetMapperFactory;
 @RestController
 public class ArticleController {
 
+    // .. Really not happy with this code ... tons of repeated stuff (DRY principle)
+    // .. Want to refactor this ASAP
     @GetMapping("/articles")
     public List<Article> GetArticles() {
         String query = "{ call GetArticles() }";
@@ -45,15 +47,45 @@ public class ArticleController {
     }
 
     @GetMapping("/articles/id")
-    public Article GetArticleById(@RequestParam(value = "id") long id) {
-        // Connection conn = DriverManager.getConnection("localhost:");
+    public Article GetArticleById(long id) {
+        String query = "{ call GetArticleById(?) }";
+        ResultSet rs;
+
+        try (Connection conn = MySQLJDBCUtil.getConnection();
+                CallableStatement stmt = conn.prepareCall(query)) {
+            stmt.setLong("in_id", id);
+
+            rs = stmt.executeQuery();
+
+            ResultSetMapper r = ResultSetMapperFactory.getResultSetMapperIdentity();
+            List<Article> articles = r.map(rs, Article.class);
+
+            return articles.size() > 0 ? articles.get(0) : null;
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
 
         return null;
     }
 
     @GetMapping("/articles/name")
-    public Article GetArticleByName(@RequestParam(value = "name") String name) {
-        // Connection conn = DriverManager.getConnection("localhost:");
+    public Article GetArticleByName(String name) {
+        String query = "{ call GetArticleByName(?) }";
+        ResultSet rs;
+
+        try (Connection conn = MySQLJDBCUtil.getConnection();
+                CallableStatement stmt = conn.prepareCall(query)) {
+            stmt.setString("in_name", name);
+
+            rs = stmt.executeQuery();
+
+            ResultSetMapper r = ResultSetMapperFactory.getResultSetMapperIdentity();
+            List<Article> articles = r.map(rs, Article.class);
+
+            return articles.size() > 0 ? articles.get(0) : null;
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
 
         return null;
     }
@@ -72,7 +104,7 @@ public class ArticleController {
         return -1;
     }
 
-    @DeleteMapping("/")
+    @DeleteMapping("/articles")
     public long DeleteArticle() {
         // .. call "DeleteArticle" proc
 
