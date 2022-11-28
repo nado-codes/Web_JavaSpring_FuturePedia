@@ -4,6 +4,7 @@ import { SnackbarProvider } from "notistack";
 
 import "./App.css";
 import { Redirect } from "./Components/Redirect";
+import { Article } from "./Views/Article";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Routes>
             <Route index element={<Redirect url="f/home" />} />
             <Route path="f/home" element={<Home />} />
+            <Route path="f/article" element={<Article />} />
             <Route path="*" element={<h1>U fkn w0t m8?</h1>} />
           </Routes>
         </BrowserRouter>
