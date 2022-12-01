@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +25,7 @@ import nl.jiankai.mapper.ResultSetMapper;
 import nl.jiankai.mapper.ResultSetMapperFactory;
 
 @RestController
+@RequestMapping("/articles")
 public class ArticleController {
 
     @ModelAttribute
@@ -37,7 +39,7 @@ public class ArticleController {
 
     // .. Really not happy with this code ... tons of repeated stuff (DRY principle)
     // .. Want to refactor this ASAP
-    @GetMapping("/article/{name}")
+    /* @GetMapping("/article/{name}")
     public Article GetArticleByNameURL(@PathVariable String name)
     {
         String query = "{ call GetArticleByName(?) }";
@@ -52,15 +54,18 @@ public class ArticleController {
             ResultSetMapper r = ResultSetMapperFactory.getResultSetMapperIdentity();
             List<Article> articles = r.map(rs, Article.class);
 
-            return articles.size() > 0 ? articles.get(0) : null;
-        } catch (SQLException ex) {
+            // if(articles.size() < 1)
+               // return new Exception("Article does not exist");
+
+            return articles.get(0);
+        } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
 
         return null;
-    }
+    } */
 
-    @GetMapping("/articles")
+    @GetMapping("/")
     public List<Article> GetArticles() {
         String query = "{ call GetArticles() }";
         ResultSet rs;
@@ -81,7 +86,7 @@ public class ArticleController {
         return Collections.emptyList();
     }
 
-    @GetMapping("/articles/id")
+    @GetMapping("/id")
     public Article GetArticleById(long id) {
         String query = "{ call GetArticleById(?) }";
         ResultSet rs;
@@ -103,7 +108,7 @@ public class ArticleController {
         return null;
     }
 
-    @GetMapping("/articles/name")
+    @GetMapping("/name")
     public Article GetArticleByName(String name) {
         String query = "{ call GetArticleByName(?) }";
         ResultSet rs;
@@ -125,21 +130,21 @@ public class ArticleController {
         return null;
     }
 
-    @PostMapping("/articles")
+    @PostMapping("/")
     public Article AddArticle() {
         // .. call "AddArticle" proc
 
         return null;
     }
 
-    @PutMapping("/articles")
+    @PutMapping("/")
     public long UpdateArticle() {
         // .. call "UpdateArticle" proc
 
         return -1;
     }
 
-    @DeleteMapping("/articles")
+    @DeleteMapping("/")
     public long DeleteArticle() {
         // .. call "DeleteArticle" proc
 

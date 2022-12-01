@@ -5,7 +5,8 @@ import { marked } from "marked";
 import * as DOMPurify from "dompurify";
 import { useSnackbar } from "notistack";
 
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
+import { IArticle } from "../Types";
 
 export const Article: React.FC = () => {
   const [articleName, setArticleName] = useState<string>();
@@ -24,10 +25,17 @@ export const Article: React.FC = () => {
       const urlTailIndex = window.location.pathname.lastIndexOf("/");
       const tempName = window.location.pathname.substring(urlTailIndex + 1);
 
+      /* const { data }: AxiosResponse<IArticle> = await axios.get(
+        `/articles/name?name=${tempName}`
+      );*/
+
       const { data } = await axios.get(`/articles/name?name=${tempName}`);
 
-      console.log("data: ", data);
+      console.log(data);
+      if (data === undefined || data === "") return;
 
+      document.title = `${tempName} - Futurepedia`;
+      setMarkdown(data.Content);
       setArticleName(tempName);
     };
 
