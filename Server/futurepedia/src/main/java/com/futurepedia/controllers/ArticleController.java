@@ -122,7 +122,7 @@ public class ArticleController {
     @PutMapping("/")
     public long UpdateArticle(@RequestBody Article article) {
         // .. call "UpdateArticle" proc
-        String query = "{ call UpdateArticle(?,?,?) }";
+        String query = "{ call UpdateArticle(?,?,?,?) }";
         ResultSet rs;
 
         try (Connection conn = MySQLJDBCUtil.getConnection();
@@ -130,6 +130,7 @@ public class ArticleController {
             stmt.setLong("in_id", article.Id);
             stmt.setString("in_name", article.Name);
             stmt.setString("in_content", article.Content);
+            stmt.setTimestamp("in_lastmodified", article.LastModified);
 
             rs = stmt.executeQuery();
 
