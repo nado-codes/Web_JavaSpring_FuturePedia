@@ -5,11 +5,11 @@ import { marked } from "marked";
 import * as DOMPurify from "dompurify";
 import { useSnackbar } from "notistack";
 
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { IArticle } from "../Types";
 
 export const Article: React.FC = () => {
-  const [articleName, setArticleName] = useState<string>();
+  const [article, setArticle] = useState<IArticle>();
   const [markdown, setMarkdown] = useState("**Hello, world!**");
   const [html, setHtml] = useState<string | JSX.Element | JSX.Element[]>();
   const { enqueueSnackbar } = useSnackbar();
@@ -25,18 +25,18 @@ export const Article: React.FC = () => {
       const urlTailIndex = window.location.pathname.lastIndexOf("/");
       const tempName = window.location.pathname.substring(urlTailIndex + 1);
 
-      /* const { data }: AxiosResponse<IArticle> = await axios.get(
+      // .. this might be a bit confusing. Springboot actually returns an empty JSON string for nulls, so
+      // .. we can't test for "undefined" as we normally would, however we still want to
+      // .. use the interface IArticle to get the intellisense for the properties
+      const { data }: AxiosResponse<IArticle> = await axios.get(
         `/articles/name?name=${tempName}`
-      );*/
+      );
 
-      const { data } = await axios.get(`/articles/name?name=${tempName}`);
-
-      console.log(data);
-      if (data === undefined || data === "") return;
+      if (typeof data === "string") return;
 
       document.title = `${tempName} - Futurepedia`;
       setMarkdown(data.Content);
-      setArticleName(tempName);
+      setArticle(data);
     };
 
     loadDataAsync();
@@ -66,16 +66,24 @@ export const Article: React.FC = () => {
   const saveArticle = async () => {
     try {
       // .. make axios PUT request (awaited) to update the article on the database
-      /* const { data } = await axios.put("/articles", {});
+      const { data } = await axios.put("/articles/", {
+        ...article,
+        Content: markdown,
+      });
+
+      /* const { data }: AxiosResponse<number> = await axios({
+        method: "put",
+        data: { ...article, Content: markdown },
+      }); */
 
       if (data < 1)
-        throw Error(`Expected one or more rows to be updated, got 0`); */
+        throw Error(`Expected one or more rows to be updated, got 0`);
 
       enqueueSnackbar(`Saved successfully`, {
         variant: "success",
       });
     } catch (e) {
-      enqueueSnackbar(`Save error`, {
+      enqueueSnackbar(`Save error, check console for details`, {
         variant: "error",
       });
       console.error(e);
